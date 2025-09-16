@@ -33,9 +33,9 @@ LCA BTG 115% CDI,LCA,115% CDI,720 dias,14/12/2026,R$ 500,Sim,Agronegócio,06/05/
 CDB Inter 110% CDI,CDB,110% CDI,Diária,365 dias,R$ 1.000,Não,,06/05/2025 14:30""")
     st.stop()
 
-# Obtém CDI atual
+# Obtém CDI atual (uso correto do símbolo BRL=X)
 try:
-    cdi = yf.download("^CDI", period="1y", progress=False)
+    cdi = yf.download("BRL=X", period="1y", progress=False)
     daily_returns = cdi['Close'].pct_change().dropna()
     if len(daily_returns) == 0:
         raise ValueError("Dados do CDI vazios")
@@ -144,7 +144,7 @@ if resultados:
     df_resultados = pd.DataFrame(resultados)
     df_resultados = df_resultados.sort_values(by="Ganho Líquido", ascending=False)
 
-    # Exibe tabela
+    # Exibe tabela — USANDO width="stretch" em vez de use_container_width
     st.dataframe(
         df_resultados[
             ["Nome", "Tipo", "Rentabilidade", "Isento de IR?", "Ganho Líquido", "IR Pago", "Total Final"]
@@ -153,7 +153,7 @@ if resultados:
             "IR Pago": "R$ {:,.2f}",
             "Total Final": "R$ {:,.2f}"
         }),
-        use_container_width=True,
+        width="stretch",  # ✅ Correção: substitui use_container_width=True
         hide_index=True
     )
 
