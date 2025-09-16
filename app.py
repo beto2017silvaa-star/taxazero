@@ -13,11 +13,15 @@ st.set_page_config(
 st.title("🌟 Taxazero Pro — Comparador Completo de Renda Fixa")
 st.markdown("Compare LCA, LCI e CDBs — veja qual dá mais ganho líquido em 1, 2 ou 3 anos.")
 
-# Carrega o CSV
+# Carrega o CSV — FORÇANDO UTF-8-SIG para lidar com BOM do Google Sheets
 try:
-    df = pd.read_csv("ofertas_btg.csv")
+    df = pd.read_csv("ofertas_btg.csv", encoding='utf-8-sig')
 except FileNotFoundError:
     st.error("❌ Arquivo 'ofertas_btg.csv' não encontrado!")
+    st.stop()
+except UnicodeDecodeError:
+    st.error("❌ Erro ao decodificar o arquivo CSV. Verifique se ele está salvo em UTF-8 com BOM (como exportado pelo Google Sheets).")
+    st.write("💡 Dica: Abra o arquivo `ofertas_btg.csv.csv` (o correto), copie todo o conteúdo e salve como `ofertas_btg.csv` usando **Bloco de Notas > Salvar como > UTF-8**.")
     st.stop()
 
 # Verifica se as colunas essenciais existem
@@ -26,11 +30,10 @@ faltando = [col for col in colunas_esperadas if col not in df.columns]
 
 if faltando:
     st.error(f"❌ Colunas ausentes no arquivo CSV: {faltando}")
-    st.write("🔍 Verifique se o arquivo `ofertas_btg.csv` está salvo em UTF-8 puro.")
+    st.write("🔍 Verifique se o arquivo `ofertas_btg.csv` está salvo em UTF-8 com BOM (como exportado pelo Google Sheets).")
     st.code("""nome,tipo,rentabilidade,liquidez,vencimento,minimo,isencao_ir,lastro,data_atualizacao
 LCI Diária BTG,LCI,110% CDI,Diária,-,R$ 1.000,Sim,Imobiliário,06/05/2025 14:30
-LCA BTG 115% CDI,LCA,115% CDI,720 dias,14/12/2026,R$ 500,Sim,Agronegócio,06/05/2025 14:30
-CDB Inter 110% CDI,CDB,110% CDI,Diária,365 dias,R$ 1.000,Não,,06/05/2025 14:30""")
+LCA BTG 115% CDI,LCA,115% CDI,720 dias,14/12/2026,R$ 500,Sim,Agronegócio,06/05/2025 14:30""")
     st.stop()
 
 # Obtém CDI atual (uso correto do símbolo BRL=X)
