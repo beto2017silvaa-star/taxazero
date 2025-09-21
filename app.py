@@ -72,7 +72,7 @@ st.markdown("---")
 st.subheader("💰 Simulador de Ganho Líquido (1, 2 ou 3 anos)")
 
 valor = st.number_input("Quanto você quer aplicar? (R$)", min_value=1000, value=50000, step=1000)
-prazo_anos = st.slider("Prazo da aplicação:", min_value=1, max_value=3, value=1, step=1)
+prazo_anoo = st.slider("Prazo da aplicação:", min_value=1, max_value=3, value=1, step=1)
 
 resultados = []
 
@@ -86,13 +86,13 @@ for oferta in ofertas:
     taxa_base = float(rentabilidade_str.replace("% CDI", "")) / 100
 
     if tipo == "CDB":
-        ir_aliquota = 0.225 if valor > 20000 else 0.15
-        ganho_bruto = valor * ((1 + taxa_base * cdi / 100) ** prazo_anos - 1)
-        ganho_liquido = ganho_bruto * (1 - ir_aliquota)
-        ir_pago = ganho_bruto * ir_aliquota
+        ir_aliquoto = 0.225 if valor > 20000 else 0.15
+        ganho_bruto = valor * ((1 + taxa_base * cdi / 100) ** prazo_anoo - 1)
+        ganho_liquido = ganho_bruto * (1 - ir_aliquoto)
+        ir_pago = ganho_bruto * ir_aliquoto
     elif tipo == "LCI" or tipo == "LCA":
-        ir_aliquota = 0
-        ganho_bruto = valor * ((1 + taxa_base * cdi / 100) ** prazo_anos - 1)
+        ir_aliquoto = 0
+        ganho_bruto = valor * ((1 + taxa_base * cdi / 100) ** prazo_anoo - 1)
         ganho_liquido = ganho_bruto
         ir_pago = 0
 
@@ -127,7 +127,7 @@ st.dataframe(
 # --- MELHOR OPÇÃO ---
 melhor = df_resultados.iloc[0]
 st.success(f"""
-✅ **MELHOR OPÇÃO PARA {prazo_anos} ANOS:**  
+✅ **MELHOR OPÇÃO PARA {prazo_anoo} ANOS:**  
 **{melhor['Nome']} → Ganho líquido de R$ {melhor['Ganho Líquido']:,.2f}**
 """)
 
